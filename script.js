@@ -78,4 +78,4 @@ function payChat() {
     rzp.open();
     */
     alert("Payment system coming soon");
-}
+} 
