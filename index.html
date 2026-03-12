@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MetroPulse 🚇</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link rel="stylesheet" href="style.css">
+
+<!-- ADSENSE (ENABLE AFTER APPROVAL)
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_ID"
+crossorigin="anonymous"></script>
+
+-->
+
+</head>
+
+<body>
+
+<h1>🚇 MetroPulse</h1>
+<p class="tag">Live commuter chat</p>
+
+<div class="card">
+
+<h2>Select Line</h2>
+
+<select id="line">
+<option>Blue Line</option>
+<option>Yellow Line</option>
+<option>Pink Line</option>
+<option>Purple Line</option>
+</select>
+
+</div>
+
+<div class="card">
+
+<h2>Report Crowd</h2>
+
+<button onclick="report('empty')">👍 Empty</button>
+<button onclick="report('normal')">😐 Normal</button>
+<button onclick="report('packed')">😵 Packed</button>
+
+</div>
+
+<div id="unlockBox" class="card hidden">
+
+<h2>Enter Chat</h2>
+
+<button onclick="watchAd()">🎬 Watch Ad</button>
+
+<p class="small">Watch ad to read live chat</p>
+
+</div>
+
+<div id="chatArea" class="card hidden">
+
+<h2>Live Chat</h2>
+
+<div id="timer" class="timer"></div>
+
+<div class="chat" id="chatBox">
+
+<p>Seat 42: Blue line packed today</p>
+<p>Seat 12: Rajiv Chowk crazy rush</p>
+
+</div>
+
+<div class="ad">
+
+Ad unlock required for free users
+
+<!-- ADSENSE UNIT (ENABLE LATER)
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="YOUR_ADSENSE_ID"
+data-ad-slot="YOUR_SLOT_ID"
+data-ad-format="auto"></ins>
+
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+-->
+
+</div>
+
+<button onclick="payChat()">💬 Unlock Chat ₹10</button>
+
+</div>
+
+<footer>
+
+MetroPulse prototype  
+Contact: hello@metropulse.app
+
+</footer>
+
+<script src="script.js"></script>
+
+<!-- DEMO CHAT SIMULATION (REMOVE LATER) -->
+<script src="demo-sim.js"></script>
+
+</body>
+</html>
