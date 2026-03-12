@@ -1,83 +1,81 @@
-function report(level){
+// =====================
+// MetroPulse Step Logic
+// =====================
 
-console.log("Crowd level:",level);
+let selectedLine = "";  // store selected metro line
+let sessionTimer;       // chat session timer
 
-// show unlock box after crowd report
-document.getElementById("unlockBox").classList.remove("hidden");
+// Step 1: Select Metro Line and go to Step 2
+function selectLine() {
+    const lineDropdown = document.getElementById("line");
+    selectedLine = lineDropdown.value;
+    console.log("Selected Line:", selectedLine);
 
+    // Hide Step 1
+    document.getElementById("lineCard").classList.add("hidden");
+    // Show Step 2
+    document.getElementById("crowdCard").classList.remove("hidden");
 }
 
+// Step 2: Report Crowd / Query → go to Step 3
+function report(level) {
+    console.log(selectedLine + " - Crowd Status:", level);
 
-
-function watchAd(){
-
-// placeholder for ad logic
-alert("Ad plays here to unlock chat preview");
-
-// reveal chat area
-document.getElementById("chatArea").classList.remove("hidden");
-
-// start session timer
-startTimer();
-
+    // Hide Step 2
+    document.getElementById("crowdCard").classList.add("hidden");
+    // Show Step 3
+    document.getElementById("unlockBox").classList.remove("hidden");
 }
 
+// Step 3: Watch Ad to unlock chat preview
+function watchAd() {
+    alert("Ad plays here to unlock chat preview");
 
+    // Show chat area
+    document.getElementById("chatArea").classList.remove("hidden");
 
-function startTimer(){
-
-let time = 600; // 10 minutes
-
-let timer = setInterval(()=>{
-
-time--;
-
-let m = Math.floor(time/60);
-let s = time % 60;
-
-if(s < 10){
-s = "0" + s;
+    // Start 10-minute session timer
+    startTimer();
 }
 
-document.getElementById("timer").innerText =
-"Chat unlocked for " + m + ":" + s;
+// Chat session timer (10 minutes)
+function startTimer() {
+    let time = 600; // 10 minutes
+    const timerEl = document.getElementById("timer");
 
-if(time <= 0){
+    clearInterval(sessionTimer); // clear previous if any
 
-clearInterval(timer);
+    sessionTimer = setInterval(() => {
+        time--;
+        let m = Math.floor(time / 60);
+        let s = time % 60;
+        if (s < 10) s = "0" + s;
 
-alert("Session ended. Watch another ad or pay ₹10.");
+        timerEl.innerText = "Chat unlocked for " + m + ":" + s;
 
+        if (time <= 0) {
+            clearInterval(sessionTimer);
+            alert("Session ended. Watch another ad or pay ₹10.");
+        }
+    }, 1000);
 }
 
-},1000);
-
+// Step 3: Payment placeholder
+function payChat() {
+    /*
+    RAZORPAY PAYMENT (Enable after API keys)
+    var options = {
+        key: "YOUR_KEY",
+        amount: "1000",
+        currency: "INR",
+        name: "MetroPulse",
+        description: "Unlock Chat",
+        handler: function(response){
+            alert("Chat unlocked successfully!");
+        }
+    };
+    var rzp = new Razorpay(options);
+    rzp.open();
+    */
+    alert("Payment system coming soon");
 }
-
-
-
-function payChat(){
-
-/*
-
-RAZORPAY PAYMENT (ENABLE AFTER API KEYS)
-
-var options = {
-key: "YOUR_KEY",
-amount: "1000",
-currency: "INR",
-name: "MetroPulse",
-description: "Unlock Chat",
-handler: function (response) {
-
-alert("Chat unlocked successfully!");
-
-}
-};
-
-var rzp = new Razorpay(options);
-rzp.open();
-
-*/
-
-// temporary placeholder
