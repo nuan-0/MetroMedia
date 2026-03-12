@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>MetroPulse 🚇</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="style.css">
 
+<!-- PWA SETTINGS -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
+
 <!-- ADSENSE (ENABLE AFTER APPROVAL)
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_ID"
+<script async
+src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_ID"
 crossorigin="anonymous"></script>
 
 -->
@@ -21,18 +29,26 @@ crossorigin="anonymous"></script>
 <h1>🚇 MetroPulse</h1>
 <p class="tag">Live commuter chat</p>
 
+
+<!-- LINE SELECTOR -->
+
 <div class="card">
 
-<h2>Select Line</h2>
+<h2>Select Metro Line</h2>
 
 <select id="line">
+
 <option>Blue Line</option>
 <option>Yellow Line</option>
 <option>Pink Line</option>
 <option>Purple Line</option>
+
 </select>
 
 </div>
+
+
+<!-- CROWD REPORT -->
 
 <div class="card">
 
@@ -44,15 +60,25 @@ crossorigin="anonymous"></script>
 
 </div>
 
+
+
+<!-- CHAT ENTRY -->
+
 <div id="unlockBox" class="card hidden">
 
 <h2>Enter Chat</h2>
 
 <button onclick="watchAd()">🎬 Watch Ad</button>
 
-<p class="small">Watch ad to read live chat</p>
+<p class="small">
+Watch ad to unlock chat preview
+</p>
 
 </div>
+
+
+
+<!-- CHAT AREA -->
 
 <div id="chatArea" class="card hidden">
 
@@ -67,11 +93,15 @@ crossorigin="anonymous"></script>
 
 </div>
 
+
+
+<!-- AD AREA -->
+
 <div class="ad">
 
-Ad unlock required for free users
+Free users must watch ads to read chat.
 
-<!-- ADSENSE UNIT (ENABLE LATER)
+<!-- ADSENSE UNIT (ENABLE AFTER APPROVAL)
 
 <ins class="adsbygoogle"
 style="display:block"
@@ -87,21 +117,51 @@ data-ad-format="auto"></ins>
 
 </div>
 
+
+
+<!-- CHAT PAYMENT -->
+
 <button onclick="payChat()">💬 Unlock Chat ₹10</button>
 
 </div>
 
+
+
+<!-- FOOTER -->
+
 <footer>
 
-MetroPulse prototype  
+MetroPulse Prototype  
 Contact: hello@metropulse.app
 
 </footer>
 
+
+
+<!-- MAIN APP SCRIPT -->
+
 <script src="script.js"></script>
 
-<!-- DEMO CHAT SIMULATION (REMOVE LATER) -->
+
+<!-- DEMO CHAT SIMULATION (DELETE WHEN REAL CHAT READY) -->
+
 <script src="demo-sim.js"></script>
+
+
+
+<!-- SERVICE WORKER REGISTRATION -->
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+navigator.serviceWorker.register("service-worker.js");
+
+}
+
+</script>
+
+
 
 </body>
 </html>
