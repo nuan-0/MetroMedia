@@ -1,109 +1,124 @@
-/* =========================
-   MetroPulse Demo JS
-   Instructions:
-   - Paste in your repo as demo.js
-   - Handles crowd status, free/paid flow, timers
-   - Ad/Payment logic commented for deployment
-========================= */
+// ====== Elements ======
+const landing = document.getElementById('landing');
+const lineSelect = document.getElementById('lineSelect');
+const proceedBtn = document.getElementById('proceedBtn');
+const crowdStatus = document.getElementById('crowdStatus');
 
-const landing = document.getElementById("landing");
-const accessSelection = document.getElementById("accessSelection");
-const chatScreen = document.getElementById("chatScreen");
-const chatBox = document.getElementById("chatBox");
+const access = document.getElementById('access');
+const payBtn = document.getElementById('payBtn');
+const adBtn = document.getElementById('adBtn');
+const timerDisplay = document.getElementById('timer');
 
-// Crowd Status
-let currentStatus = "empty";
+const chatScreen = document.getElementById('chatScreen');
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+const lineName = document.getElementById('lineName');
+const crowdDisplay = document.getElementById('crowdDisplay');
 
-function updateStatus(status){
-    currentStatus = status;
-    // Landing page status
-    const statusDiv = document.getElementById("crowd-status");
-    statusDiv.className = "status " + status;
-    statusDiv.textContent = "Current status: " + status.charAt(0).toUpperCase() + status.slice(1);
+// ====== State ======
+let selectedLine = '';
+let freeTimer = null;
+let isPaid = false;
 
-    // Chat screen status
-    const chatStatus = document.getElementById("crowd-status-chat");
-    chatStatus.className = "status " + status;
-    chatStatus.textContent = "Current status: " + status.charAt(0).toUpperCase() + status.slice(1);
+// ====== Landing Page Flow ======
+proceedBtn.addEventListener('click', () => {
+  selectedLine = lineSelect.value;
+  lineName.innerText = selectedLine.charAt(0).toUpperCase() + selectedLine.slice(1) + ' Line';
+  updateCrowdStatus();
+  landing.classList.add('hidden');
+  access.classList.remove('hidden');
+});
+
+// ====== Access Flow ======
+payBtn.addEventListener('click', () => {
+  startPaidChat();
+});
+
+adBtn.addEventListener('click', async () => {
+  // TODO: Integrate AdMob / rewarded ad here
+  alert('Ad placeholder — after watching ad you can read chat for 10 min.');
+  startFreeChat();
+});
+
+// ====== Free User Flow ======
+function startFreeChat() {
+  sendBtn.disabled = true;
+  access.classList.add('hidden');
+  chatScreen.classList.remove('hidden');
+
+  let timeLeft = 10 * 60; // 10 minutes
+  timerDisplay.innerText = `Time left: 10:00`;
+
+  freeTimer = setInterval(() => {
+    timeLeft--;
+    const min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+    const sec = String(timeLeft % 60).padStart(2, '0');
+    timerDisplay.innerText = `Time left: ${min}:${sec}`;
+
+    if (timeLeft <= 0) {
+      clearInterval(freeTimer);
+      alert('10 minutes over! Choose access again.');
+      chatScreen.classList.add('hidden');
+      access.classList.remove('hidden');
+    }
+  }, 1000);
+
+  loadChat();
 }
 
-// Crowd buttons
-document.getElementById("btn-empty").onclick = () => updateStatus("empty");
-document.getElementById("btn-normal").onclick = () => updateStatus("normal");
-document.getElementById("btn-crowded").onclick = () => updateStatus("crowded");
-
-// Watch ad on landing to move forward (simulate)
-document.getElementById("watch-ad").onclick = () => {
-    landing.style.display = "none";
-    accessSelection.style.display = "block";
-};
-
-// ------------------
-// Access Selection
-// ------------------
-const btnPay = document.getElementById("btn-pay");
-const btnFree = document.getElementById("btn-free");
-
-let freeTimer;
-let isPaidUser = false;
-
-function startChat(paid){
-    isPaidUser = paid;
-    accessSelection.style.display = "none";
-    chatScreen.style.display = "block";
-
-    // Initialize crowd status
-    updateStatus(currentStatus);
-
-    if(!paid){
-        // Free users: 10 min timer
-        let timeLeft = 10*60; // seconds
-        freeTimer = setInterval(()=>{
-            timeLeft--;
-            if(timeLeft <= 0){
-                clearInterval(freeTimer);
-                alert("Your 10 min free access is over. Pay or watch an ad to continue.");
-                chatScreen.style.display = "none";
-                accessSelection.style.display = "block";
-            }
-        }, 1000);
-    } else {
-        // Paid user: set/reset localStorage for full day
-        const now = new Date();
-        const expiry = new Date();
-        expiry.setHours(24,0,0,0); // midnight
-        localStorage.setItem("paidAccessExpiry", expiry.getTime());
-    }
+// ====== Paid User Flow ======
+function startPaidChat() {
+  isPaid = true;
+  sendBtn.disabled = false;
+  access.classList.add('hidden');
+  chatScreen.classList.remove('hidden');
+  timerDisplay.innerText = 'Full-day access';
+  loadChat();
 }
 
-// ------------------
-// Button actions
-// ------------------
+// ====== Chat ======
+sendBtn.addEventListener('click', async () => {
+  const msg = messageInput.value.trim();
+  if (!msg) return;
 
-// Paid button (simulate payment)
-btnPay.onclick = () => {
-    /* Deployment:
-       Uncomment below and integrate Razorpay API
-    */
-    // openRazorpayPayment().then(()=> startChat(true));
-    startChat(true); // Demo only
-};
+  // Call backend placeholder
+  await fetch(`/api/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ line: selectedLine, message: msg })
+  });
 
-// Free button (simulate ad watch)
-btnFree.onclick = () => {
-    /* Deployment:
-       Replace with AdMob reward ad logic
-    */
-    // showRewardedAd().then(()=> startChat(false));
-    startChat(false); // Demo only
-};
+  messageInput.value = '';
+  await loadChat();
+});
 
-// ------------------
-// Optional: Restore paid session if user reloads page
-// ------------------
-window.onload = () => {
-    const expiry = localStorage.getItem("paidAccessExpiry");
-    if(expiry && new Date().getTime() < expiry){
-        startChat(true);
-    }
-};
+async function loadChat() {
+  // Fetch messages from backend placeholder
+  const res = await fetch(`/api/getMessages?line=${selectedLine}`);
+  const data = await res.json();
+  chatMessages.innerHTML = '';
+
+  data.messages.forEach(m => {
+    const p = document.createElement('p');
+    p.innerText = m;
+    chatMessages.appendChild(p);
+  });
+
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// ====== Crowd Status ======
+async function updateCrowdStatus() {
+  // Placeholder: Fetch from backend
+  const res = await fetch(`/api/updateCrowd?line=${selectedLine}`);
+  const data = await res.json();
+  crowdStatus.innerText = `Crowd status: ${data.status}`;
+  crowdDisplay.innerText = `Crowd: ${data.status}`;
+}
+
+// ====== Auto-refresh chat every 5 sec ======
+setInterval(() => {
+  if (chatScreen.classList.contains('hidden')) return;
+  loadChat();
+}, 5000);
