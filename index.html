@@ -1,47 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MetroPulse</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetroMedia Chat</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Landing / Line Selection -->
-  <div id="landing">
-    <h1>MetroPulse</h1>
-    <label for="lineSelect">Select your metro line:</label>
-    <select id="lineSelect">
-      <option value="blue">Blue Line</option>
-      <option value="red">Red Line</option>
-      <option value="green">Green Line</option>
-    </select>
-    <button id="proceedBtn">Proceed</button>
-    <div id="crowdStatus">Crowd status: Unknown</div>
-  </div>
 
-  <!-- Access Selection -->
-  <div id="access" class="hidden">
-    <h2>Access Options</h2>
-    <button id="payBtn">Pay ₹10 for full-day chat</button>
-    <button id="adBtn">Watch ad for 10-min read-only</button>
-    <div id="timer"></div>
-  </div>
+<h2>Select Your Metro Line</h2>
+<select id="lineSelect">
+  <option value="blue">Blue</option>
+  <option value="yellow">Yellow</option>
+  <option value="red">Red</option>
+  <option value="violet">Violet</option>
+  <option value="pink">Pink</option>
+</select>
+<button id="proceedBtn">Proceed</button>
 
-  <!-- Chat Screen -->
-  <div id="chatScreen" class="hidden">
-    <div id="chatHeader">
-      <h2 id="lineName">Line Name</h2>
-      <div id="crowdDisplay">Crowd: Unknown</div>
-    </div>
-    <div id="chatMessages"></div>
-    <div id="chatInput">
-      <input type="text" id="messageInput" placeholder="Type your message...">
-      <button id="sendBtn">Send</button>
-    </div>
-  </div>
+<div id="access" style="display:none; margin-top:20px;">
+  <button id="payBtn">Pay ₹10 for Full-Day Chat (Any Line)</button>
+  <button id="adBtn">Watch Ad for 10-min Read-Only (Selected Line)</button>
+</div>
 
-  <script src="app.js"></script>
+<div id="chatScreen" style="display:none; margin-top:20px;">
+  <div id="chatMessages" style="height:300px; overflow-y:auto; border:1px solid #000;"></div>
+  <input id="messageInput" placeholder="Type message" style="width:80%;">
+  <button id="sendBtn">Send</button>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
