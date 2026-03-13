@@ -4,7 +4,14 @@ let currentLine = '';
 let isPaidUser = false;
 let freeTimer = 10 * 60; // free read-only timer in seconds
 
+// ---------------------------
+// AdSense key from Vercel env
+// ---------------------------
+const adsenseKey = process.env.ADSENSE; // replace YOUR-ADSENSE-CLIENT-ID here if needed
+
+// ---------------------------
 // DOM elements
+// ---------------------------
 const lineSelect = document.getElementById('lineSelect');
 const proceedBtn = document.getElementById('proceedBtn');
 const accessDiv = document.getElementById('access');
