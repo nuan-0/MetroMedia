@@ -1,4 +1,4 @@
-
+// In-memory message storage
 let messagesDB = {
   blue: [],
   red: [],
