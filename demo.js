@@ -5,13 +5,10 @@ let currentLine = '';
 let isPaidUser = false;
 let freeTimer = 10 * 60; // free read-only timer in seconds
 
-// ---------------------------
 // AdSense key from Vercel env
-// ---------------------------
-const adsenseKey = process.env.ADSENSE; // uncomment and set in Vercel
+const adsenseKey = process.env.ADSENSE;
 
-// ---------------------------
-// City → Line mapping (actual metro lines)
+// City → Line mapping (actual lines)
 const cityLines = {
   "delhi": ["Red Line", "Yellow Line", "Blue Line Main", "Blue Line Branch", "Green Line", "Violet Line", "Pink Line", "Magenta Line", "Grey Line", "Airport Express"],
   "mumbai": ["Metro Line 1 (Versova–Ghatkopar)", "Metro Line 2 (DN Nagar–Mandala)", "Metro Line 2A (Dahisar–Andheri)", "Metro Line 3 (Colaba–Bandra SEEPZ)", "Line 7 (Andheri–Bhandup)"],
@@ -28,9 +25,7 @@ const cityLines = {
   "kochi": ["Kochi Metro"]
 };
 
-// ---------------------------
 // DOM elements
-// ---------------------------
 const citySelect = document.getElementById('citySelect');
 const lineSelect = document.getElementById('lineSelect');
 const proceedBtn = document.getElementById('proceedBtn');
@@ -44,8 +39,7 @@ const sendBtn = document.getElementById('sendBtn');
 
 sendBtn.disabled = true; // send disabled by default
 
-// ---------------------------
-// Populate line dropdown based on city
+// Populate lines dropdown
 function populateLines(city) {
   const lines = cityLines[city];
   lineSelect.innerHTML = '';
@@ -56,17 +50,13 @@ function populateLines(city) {
     lineSelect.appendChild(option);
   });
 }
-
-// Initialize lines for default city
 populateLines(currentCity);
 
-// When city changes
 citySelect.addEventListener('change', () => {
   currentCity = citySelect.value;
   populateLines(currentCity);
 });
 
-// ---------------------------
 // Helpers
 function updateChatUI(messages) {
   chatMessages.innerHTML = messages.map(m => `<div>${m.message}</div>`).join('');
@@ -87,7 +77,6 @@ function updateFreeCountdown() {
   }
 }
 
-// ---------------------------
 // Polling
 setInterval(fetchMessages, 2000);
 setInterval(() => {
@@ -100,50 +89,40 @@ setInterval(() => {
   updateFreeCountdown();
 }, 1000);
 
-// ---------------------------
-// Event Listeners
-
 // Step 1: User selects line
 proceedBtn.addEventListener('click', async () => {
   currentLine = lineSelect.value;
-
-  // Step 2: Fetch crowd status for selected city + line
   const statusRes = await fetch(`/api/crowd?city=${currentCity}&line=${currentLine}`);
   const statusData = await statusRes.json();
   alert(`Current crowd status for ${currentCity.toUpperCase()} ${currentLine}: ${statusData.status}`);
-
-  // Step 3: Show Ad/Pay options
   accessDiv.style.display = 'block';
 });
 
-// Step 3: Free read-only session
+// Step 2: Free read-only
 adBtn.addEventListener('click', async () => {
   const res = await fetch(`/api/access?userId=${userId}&city=${currentCity}&line=${currentLine}&type=free`);
   const data = await res.json();
   isPaidUser = false;
   freeTimer = data.expiresIn;
-
   accessDiv.style.display = 'none';
   chatScreen.style.display = 'block';
-  sendBtn.disabled = true; // always read-only
+  sendBtn.disabled = true;
 });
 
-// Step 3: Paid session
+// Step 2: Paid
 payBtn.addEventListener('click', async () => {
   const res = await fetch(`/api/access?userId=${userId}&city=${currentCity}&line=${currentLine}&type=paid`);
   const data = await res.json();
   isPaidUser = true;
-
   accessDiv.style.display = 'none';
   chatScreen.style.display = 'block';
-  sendBtn.disabled = false; // can send
+  sendBtn.disabled = false;
 });
 
-// Send messages (paid users only)
+// Send messages
 sendBtn.addEventListener('click', async () => {
   const msg = messageInput.value.trim();
   if (!msg) return;
-
   const res = await fetch('/api/send', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -151,11 +130,9 @@ sendBtn.addEventListener('click', async () => {
   });
   const data = await res.json();
   if (data.error) return alert(data.error);
-
   messageInput.value = '';
 });
 
-// Press Enter to send
 messageInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !sendBtn.disabled) sendBtn.click();
 });
