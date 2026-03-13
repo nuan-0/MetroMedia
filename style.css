@@ -1,171 +1,103 @@
-/* =========================
-   MetroPulse 2026 Sketchy CSS
-   Instructions:
-   - Copy as style.css
-   - Works with demo.js & index.html
-========================= */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
-/* --- Body / Background --- */
-body{
-  font-family: 'Inter', sans-serif;
-  background-color: #ffffff; /* clean white */
-  color:#111;
-  text-align:center;
-  margin:0;
-  padding:0;
+/* General reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif; /* playful sketchy font */
 }
 
-/* --- Typography --- */
-h1{
-  margin-top:40px;
-  font-size:36px;
-  font-weight:600;
+/* Body */
+body {
+  background-color: #ffffff; /* full white */
+  color: #000000;
+  line-height: 1.4;
+  padding: 20px;
 }
 
-h2{
-  margin-top:20px;
-  font-size:28px;
-  font-weight:600;
+/* Hidden class */
+.hidden {
+  display: none;
 }
 
-.tag{
-  color:#333;
-  margin-bottom:25px;
-  font-weight:500;
+/* Landing page */
+#landing {
+  text-align: center;
+  padding: 20px;
+  border: 4px solid #000;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 #000; /* thick sketchy shadow */
 }
 
-/* --- Cards --- */
-.card{
-  background:#ffffff;
-  margin:25px auto;
-  padding:25px;
-  border-radius:16px;
-  border: 3px solid #000; /* thick pencil line */
-  box-shadow:
-    2px 2px 0px #000,
-    -2px -2px 0px #000,
-    0px 4px 0px #000;
-  max-width: 400px;
-  position: relative;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.card:hover{
-  transform: rotate(-0.5deg) scale(1.02);
-  box-shadow:
-    3px 3px 0px #000,
-    -2px -2px 0px #000,
-    0px 5px 0px #000;
-}
-
-/* --- Status Badges --- */
-.status{
-  padding:8px 12px;
-  border-radius:12px;
-  display:inline-block;
-  font-weight:600;
-  margin-bottom:15px;
-}
-
-.empty{ background:#22c55e; color:white; }       /* green = safe */
-.normal{ background:#facc15; color:black; }      /* yellow = moderate */
-.crowded{ background:#ef4444; color:white; }     /* red = crowded */
-
-/* --- Select / Dropdown --- */
-select{
-  padding:12px 14px;
-  border-radius:12px;
-  border:3px solid #000;
-  font-size:16px;
-  width:80%;
-  background:#fff;
-  color:#111;
-  outline:none;
-}
-
-/* --- Buttons --- */
-button{
-  padding:14px 22px;
-  margin:10px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  cursor:pointer;
-  background:#ffffff;
-  color:#111;
+/* Buttons */
+button {
+  background-color: #fff;
   border: 3px solid #000;
-  box-shadow:
-    2px 2px 0px #000,
-    -1px -1px 0px #000;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 #000; /* thick hand-drawn look */
+  transition: transform 0.1s;
 }
 
-button:hover{
-  transform: scale(1.05) rotate(-0.5deg);
-  box-shadow:
-    3px 3px 0px #000,
-    -2px -2px 0px #000;
+button:hover {
+  transform: translate(2px, 2px);
 }
 
-/* --- Hidden Sections --- */
-.hidden{ display:none; }
-
-/* --- Chat --- */
-.chat{
-  background:#fff;
-  padding:15px;
-  border-radius:14px;
-  text-align:left;
-  max-height:280px;
-  overflow-y:auto;
-  border:3px solid #000;
-  box-shadow:
-    2px 2px 0px #000,
-    -2px -2px 0px #000;
+/* Select input */
+select {
+  border: 3px solid #000;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+  margin: 10px 0;
 }
 
-/* Chat bubbles */
-.chat p{
-  margin:8px 0;
-  font-size:15px;
-  background: rgba(0,0,0,0.05);
-  padding:6px 10px;
-  border-radius:10px;
-  border-left: 3px solid #000; /* pencil line accent */
+/* Chat screen */
+#chatScreen {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  border: 4px solid #000;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 6px 6px 0 #000;
 }
 
-/* Auto-scroll scrollbar styling */
-.chat::-webkit-scrollbar {
-  width:6px;
-}
-.chat::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.2);
-  border-radius:3px;
-}
-.chat::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.05);
+#chatHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+  border-bottom: 3px solid #000;
+  margin-bottom: 10px;
 }
 
-/* --- Timer / small text --- */
-.timer{
-  margin-bottom:10px;
-  color:#111;
-  font-size:14px;
+#chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  border: 3px solid #000;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
-.small{
-  font-size:13px;
-  color:#555;
+#chatMessages p {
+  padding: 4px;
+  border-bottom: 1px dashed #000;
 }
 
-/* --- Footer --- */
-footer{
-  margin-top:30px;
-  padding:20px;
-  font-size:12px;
-  color:#333;
-  border-top: 3px solid #000;
-  box-shadow: 2px 2px 0px #000;
+/* Chat input area */
+#chatInput {
+  display: flex;
+}
+
+#messageInput {
+  flex: 1;
+  padding: 10px;
+  border: 3px solid #000;
+  border-radius: 8px 0 0 8px;
+}
+
+#sendBtn {
+  border-radius: 0 8px 8px 0;
 }
