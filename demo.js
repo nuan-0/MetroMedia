@@ -1,4 +1,8 @@
-// ==== Variables ====
+//////////////////////////////
+// Metro Chat PWA - app.js //
+//////////////////////////////
+
+// ===== Variables =====
 const cities = {
   delhi: ["Blue", "Yellow", "Red", "Violet", "Pink"],
   bangalore: ["Purple", "Green", "Yellow"],
@@ -23,13 +27,20 @@ const accessOverlay = document.getElementById("accessOverlay");
 const payBtn = document.getElementById("payBtn");
 const watchAdBtn = document.getElementById("watchAdBtn");
 
-const shareBtn = document.getElementById("shareBtn");
+const adOverlay = document.getElementById("adOverlay");
+const closeAdBtn = document.getElementById("closeAdBtn");
 
+// ===== Share button variables =====
+const appLink = "https://your-pwa-url.vercel.app";
+
+// ===== User state =====
 let currentUser = { paid: false, freeTimer: 0 };
 let timerInterval;
 let selectedCity, selectedLine;
 
-// ==== Populate lines based on city ====
+// ===== Functions =====
+
+// Populate line options based on selected city
 function updateLines() {
   const lines = cities[citySelect.value] || [];
   lineSelect.innerHTML = "";
@@ -41,24 +52,48 @@ function updateLines() {
   });
 }
 
-// ==== Page 1 → Page 2 flow ====
+// Show overlay for paid/free access
+function showOverlay() {
+  chatContainer.classList.add("blurred");
+  accessOverlay.style.display = "flex";
+  sendBtn.disabled = true;
+}
+
+// Start 10-min timer for free users
+function startFreeTimer(minutes) {
+  currentUser.freeTimer = minutes * 60;
+  sendBtn.disabled = true;
+  chatContainer.classList.remove("blurred");
+
+  timerInterval = setInterval(() => {
+    currentUser.freeTimer--;
+    if (currentUser.freeTimer <= 0) {
+      clearInterval(timerInterval);
+      showOverlay(); // back to overlay after 10 min
+    }
+  }, 1000);
+}
+
+// Append chat message
+function appendMessage(sender, text) {
+  const div = document.createElement("div");
+  div.className = "message";
+  div.innerHTML = `<b>${sender}:</b> ${text}`;
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// ===== Event Listeners =====
+
+// Page 1 → Page 2
 proceedBtn.addEventListener("click", () => {
   selectedCity = citySelect.value;
   selectedLine = lineSelect.value;
   if (!selectedLine) return alert("Select a line!");
   page1.classList.remove("active");
   page2.classList.add("active");
-
-  // Initially show overlay
   showOverlay();
 });
-
-// ==== Overlay Logic ====
-function showOverlay() {
-  chatContainer.classList.add("blurred");
-  accessOverlay.style.display = "flex";
-  sendBtn.disabled = true;
-}
 
 // Paid user click
 payBtn.addEventListener("click", () => {
@@ -69,30 +104,20 @@ payBtn.addEventListener("click", () => {
   sendBtn.disabled = false;
 });
 
-// Free user click → simulate interstitial ad
+// Free user click → show ad overlay
 watchAdBtn.addEventListener("click", () => {
-  // Show fake interstitial ad
-  alert("Watch ad here (simulate interstitial)"); // replace with real ad logic
-  startFreeTimer(10); // 10-min read-only
+  adOverlay.style.display = "flex";
+  chatContainer.classList.add("blurred");
 });
 
-// ==== Free timer ====
-function startFreeTimer(minutes) {
-  currentUser.freeTimer = minutes * 60;
-  accessOverlay.style.display = "none";
+// Close ad → start free 10-min chat
+closeAdBtn.addEventListener("click", () => {
+  adOverlay.style.display = "none";
   chatContainer.classList.remove("blurred");
-  sendBtn.disabled = true;
+  startFreeTimer(10);
+});
 
-  timerInterval = setInterval(() => {
-    currentUser.freeTimer--;
-    if (currentUser.freeTimer <= 0) {
-      clearInterval(timerInterval);
-      showOverlay();
-    }
-  }, 1000);
-}
-
-// ==== Chat send ====
+// Send chat message
 sendBtn.addEventListener("click", () => {
   const msg = chatInput.value.trim();
   if (!msg) return;
@@ -101,17 +126,7 @@ sendBtn.addEventListener("click", () => {
   // TODO: send to backend / Telegram for live chat
 });
 
-function appendMessage(sender, text) {
-  const div = document.createElement("div");
-  div.className = "message";
-  div.innerHTML = `<b>${sender}:</b> ${text}`;
-  messagesDiv.appendChild(div);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
-
-// ==== Share functions ====
-const appLink = "https://your-pwa-url.vercel.app";
-
+// Share buttons
 function shareX() {
   const text = encodeURIComponent("Check out MetroMedia chat PWA! 🚇 " + appLink);
   window.open(`https://x.com/intent/tweet?text=${text}`, "_blank");
@@ -128,6 +143,6 @@ function copyLink() {
     .catch(() => alert("Copy failed. Try manually!"));
 }
 
-// ==== Initialize ====
+// Initialize lines
 updateLines();
 citySelect.addEventListener("change", updateLines);
