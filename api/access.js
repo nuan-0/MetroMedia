@@ -1,26 +1,21 @@
-// /api/access.js
-import { sessionsDB } from './db';
+// access.js
+let freeSessions = {}; // key = userId
+let paidSessions = {}; // key = userId
 
-export default function handler(req, res) {
-  const { userId, line, type } = req.query;
-  if (!userId || !line || !type) return res.status(400).json({ allowed: false });
-
-  const now = Date.now();
+export default async function handler(req, res) {
+  const { userId, city, line, type } = req.query;
+  if (!userId || !city || !line || !type) return res.status(400).json({error:'Missing parameters'});
 
   if (type === 'free') {
-    // Start a new free session for 10 min
-    sessionsDB[userId] = { line, type: 'free', startTime: now };
-    return res.status(200).json({ allowed: true, expiresIn: 10 * 60 }); // seconds
+    freeSessions[userId] = {city, line, expiresIn: 10*60}; // 10min
+    return res.status(200).json({expiresIn: 10*60});
+  } else if (type === 'paid') {
+    const now = new Date();
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+    const secondsLeft = Math.floor((endOfDay-now)/1000);
+    paidSessions[userId] = {city, line, expiresIn: secondsLeft};
+    return res.status(200).json({expiresIn: secondsLeft});
+  } else {
+    return res.status(400).json({error:'Invalid type'});
   }
-
-  if (type === 'paid') {
-    // Paid session valid until next midnight
-    const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
-    sessionsDB[userId] = { line, type: 'paid', startTime: now, expiresAt: midnight.getTime() };
-    const remaining = Math.floor((midnight.getTime() - now) / 1000);
-    return res.status(200).json({ allowed: true, expiresIn: remaining });
-  }
-
-  return res.status(400).json({ allowed: false });
 }
