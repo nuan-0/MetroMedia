@@ -1,95 +1,167 @@
+/* =========================
+   MetroPulse 2026 Sketchy CSS
+   Author: Generated
+   ========================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+/* --- Body / Background --- */
 body{
-font-family:Arial, sans-serif;
-background:#0f172a;
-color:white;
-text-align:center;
-margin:0;
-padding:0;
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+
+  /* Subtle pencil sketch crosshatch */
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0' y1='0' x2='10' y2='10' stroke='%23cccccc' stroke-width='0.5'/%3E%3Cline x1='0' y1='10' x2='10' y2='0' stroke='%23cccccc' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 20px 20px;
+
+  color:#111;
+  text-align:center;
+  margin:0;
+  padding:0;
 }
 
+/* Optional noise overlay for extra texture */
+body::before {
+  content: "";
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  pointer-events: none;
+  background: url('noise.png') repeat;
+  opacity:0.05; /* subtle */
+  z-index: 0;
+}
+
+/* --- Typography --- */
 h1{
-margin-top:30px;
-font-size:32px;
+  margin-top:40px;
+  font-size:36px;
+  font-weight:600;
 }
 
 .tag{
-color:#94a3b8;
-margin-bottom:20px;
+  color:#333;
+  margin-bottom:25px;
+  font-weight:500;
 }
 
+/* --- Cards --- */
 .card{
-background:#1e293b;
-margin:20px;
-padding:20px;
-border-radius:12px;
-box-shadow:0 6px 20px rgba(0,0,0,0.3);
+  background:#ffffff;
+  margin:25px auto;
+  padding:25px;
+  border-radius:16px;
+  border: 3px solid #000; /* thick pencil line */
+  box-shadow:
+    2px 2px 0px #000,
+    -2px -2px 0px #000,
+    0px 4px 0px #000;
+  max-width: 400px;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+.card:hover{
+  transform: rotate(-0.5deg) scale(1.02);
+  box-shadow:
+    3px 3px 0px #000,
+    -2px -2px 0px #000,
+    0px 5px 0px #000;
+}
+
+/* --- Select / Dropdown --- */
 select{
-padding:10px;
-border-radius:8px;
-border:none;
-font-size:16px;
+  padding:12px 14px;
+  border-radius:12px;
+  border:3px solid #000;
+  font-size:16px;
+  width:80%;
+  background:#fff;
+  color:#111;
+  outline:none;
 }
 
+/* --- Buttons --- */
 button{
-padding:12px 20px;
-margin:10px;
-border:none;
-border-radius:10px;
-font-size:16px;
-cursor:pointer;
-background:#3b82f6;
-color:white;
-transition:0.2s;
+  padding:14px 22px;
+  margin:10px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  cursor:pointer;
+  background:#ffffff;
+  color:#111;
+  border: 3px solid #000;
+  box-shadow:
+    2px 2px 0px #000,
+    -1px -1px 0px #000;
+  transition: all 0.2s ease;
 }
 
 button:hover{
-background:#2563eb;
-transform:scale(1.05);
+  transform: scale(1.05) rotate(-0.5deg);
+  box-shadow:
+    3px 3px 0px #000,
+    -2px -2px 0px #000;
 }
 
-.hidden{
-display:none;
-}
+/* --- Hidden Sections --- */
+.hidden{ display:none; }
 
+/* --- Chat --- */
 .chat{
-background:#020617;
-padding:15px;
-border-radius:10px;
-text-align:left;
-max-height:250px;
-overflow-y:auto;
+  background:#fff;
+  padding:15px;
+  border-radius:14px;
+  text-align:left;
+  max-height:280px;
+  overflow-y:auto;
+  border:3px solid #000;
+  box-shadow:
+    2px 2px 0px #000,
+    -2px -2px 0px #000;
 }
 
+/* Chat bubbles */
 .chat p{
-margin:6px 0;
-font-size:14px;
+  margin:8px 0;
+  font-size:15px;
+  background: rgba(0,0,0,0.05);
+  padding:6px 10px;
+  border-radius:10px;
+  border-left: 3px solid #000; /* pencil line accent */
 }
 
-.ad{
-margin-top:15px;
-padding:15px;
-background:#334155;
-border-radius:10px;
-font-size:13px;
-color:#cbd5f5;
+/* Auto-scroll scrollbar styling */
+.chat::-webkit-scrollbar {
+  width:6px;
+}
+.chat::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius:3px;
+}
+.chat::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
 }
 
+/* --- Timer / small text --- */
 .timer{
-margin-bottom:10px;
-color:#22c55e;
-font-size:14px;
+  margin-bottom:10px;
+  color:#111;
+  font-size:14px;
 }
 
 .small{
-font-size:13px;
-color:#94a3b8;
+  font-size:13px;
+  color:#555;
 }
 
+/* --- Footer --- */
 footer{
-margin-top:30px;
-padding:20px;
-font-size:12px;
-color:#94a3b8;
+  margin-top:30px;
+  padding:20px;
+  font-size:12px;
+  color:#333;
+  border-top: 3px solid #000;
+  box-shadow: 2px 2px 0px #000;
 }
