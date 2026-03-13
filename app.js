@@ -1,7 +1,7 @@
 // app.js
 
-// Free user timer = 3 minutes
-let freeTime = 3 * 60; // 3 min in seconds
+// Free user timer = 10 minutes
+let freeTime = 10*60; // 10 min in seconds
 
 // Example cities and lines
 const cities = {
