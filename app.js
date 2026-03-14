@@ -3,7 +3,7 @@
 // ============================
 
 // Free user timer = 3 minutes
-let freeTime = 180; // seconds
+let freeTime = 180;
 
 // Example cities and metro lines
 const cities = {
@@ -70,11 +70,10 @@ function populateLines() {
 }
 
 citySelect.addEventListener("change", populateLines);
-
 populateLines();
 
 // ============================
-// Start Button
+// Start Chat Button
 // ============================
 
 startBtn.addEventListener("click", () => {
@@ -97,7 +96,7 @@ startBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Overlay Logic
+// Overlay
 // ============================
 
 function showOverlay() {
@@ -109,24 +108,20 @@ function showOverlay() {
 }
 
 // ============================
-// Watch Ad Logic
+// Watch Ad
 // ============================
 
 watchAdBtn.addEventListener("click", () => {
 
   adOverlay.style.display = "flex";
 
-  // simulate ad watch time
   setTimeout(() => {
 
     adOverlay.style.display = "none";
-
     overlay.style.display = "none";
 
-    startChat(false); // read only
-
+    startChat(false);
     logSession("free");
-
     startFreeTimer();
 
   }, 5000);
@@ -134,7 +129,7 @@ watchAdBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Pay Button Logic
+// Pay Button
 // ============================
 
 payBtn.addEventListener("click", () => {
@@ -152,21 +147,71 @@ payBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Chat Logic
+// Chat UI
 // ============================
 
 function startChat(isPaid) {
 
   chatContainer.innerHTML = `
-  
-  <div>
-  <p><strong>Metromedia Live Chat</strong></p>
-  <p>City: ${citySelect.value}</p>
-  <p>Line: ${lineSelect.value}</p>
-  <p>Status: ${isPaid ? "Full Access" : "Read Only (3 min)"}</p>
+
+  <div id="chatHeader">
+  🚇 ${citySelect.value} ${lineSelect.value} Line
   </div>
-  
+
+  <div id="messages"></div>
+
+  ${isPaid ? `
+  <div id="chatInputArea">
+    <input id="chatInput" placeholder="Type message..." />
+    <button id="sendBtn">Send</button>
+  </div>
+  ` : `
+  <div id="chatInputArea">
+    <p>Read only mode</p>
+  </div>
+  `}
+
   `;
+
+  if (isPaid) {
+
+    const sendBtn = document.getElementById("sendBtn");
+    const chatInput = document.getElementById("chatInput");
+
+    sendBtn.addEventListener("click", sendMessage);
+
+    chatInput.addEventListener("keypress", e => {
+
+      if (e.key === "Enter") sendMessage();
+
+    });
+
+  }
+
+}
+
+// ============================
+// Send Message
+// ============================
+
+function sendMessage() {
+
+  const input = document.getElementById("chatInput");
+  const messages = document.getElementById("messages");
+
+  if (!input.value.trim()) return;
+
+  const msg = document.createElement("div");
+
+  msg.className = "messageBubble myMessage";
+
+  msg.innerText = input.value;
+
+  messages.appendChild(msg);
+
+  input.value = "";
+
+  messages.scrollTop = messages.scrollHeight;
 
 }
 
@@ -205,10 +250,8 @@ shareBtn.addEventListener("click", () => {
   if (navigator.share) {
 
     navigator.share({
-
       title: "Metromedia",
       url: url
-
     });
 
   } else {
@@ -222,7 +265,7 @@ shareBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Logging
+// Session Logging
 // ============================
 
 function logSession(type) {
@@ -238,11 +281,8 @@ function logSession(type) {
     body: JSON.stringify({
 
       city: citySelect.value,
-
       line: lineSelect.value,
-
       type: type,
-
       timestamp: new Date().toISOString()
 
     })
