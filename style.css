@@ -365,3 +365,25 @@ select {
 #messages{
   scroll-behavior: smooth;
 }
+/* =======================
+   New Message Indicator
+   ======================= */
+
+#newMsgIndicator{
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 2px solid #000;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  display: none;
+  box-shadow: 2px 2px #ccc;
+}
+
+#newMsgIndicator:hover{
+  background:#f5f5f5;
+}
