@@ -362,3 +362,6 @@ select {
   }
 
 }
+#messages{
+  scroll-behavior: smooth;
+}
