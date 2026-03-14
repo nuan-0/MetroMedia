@@ -1,6 +1,7 @@
 /* =======================
    GLOBAL SKETCH THEME
    ======================= */
+
 body {
   margin: 0;
   padding: 0;
@@ -50,7 +51,9 @@ body {
   transform: translateY(-2px);
 }
 
-/* Dropdowns */
+/* =======================
+   Dropdowns
+   ======================= */
 
 select {
   width: 100%;
@@ -102,7 +105,9 @@ select {
   opacity: 0.6;
 }
 
-/* Messages */
+/* =======================
+   Messages
+   ======================= */
 
 .messages {
   flex: 1;
@@ -119,7 +124,9 @@ select {
   display: inline-block;
 }
 
-/* Typing area */
+/* =======================
+   Typing Area
+   ======================= */
 
 #typingArea {
   display: flex;
@@ -173,7 +180,7 @@ select {
   padding: 16px 32px;
   font-weight: bold;
   background: #fff;
-  box-shadow: 0 0 12px #5aa8ff, 0 0 24px #7ce3ff;
+  box-shadow: 0 0 12px #ccc;
   cursor: pointer;
   font-size: 18px;
   border-radius: 12px;
@@ -186,7 +193,7 @@ select {
 }
 
 /* =======================
-   Share Button (Top-right)
+   Share Button
    ======================= */
 
 .share-button {
@@ -249,6 +256,80 @@ select {
 }
 
 /* =======================
+   Chat Header + Bubble UI
+   ======================= */
+
+#chatHeader{
+  font-weight: bold;
+  padding: 10px;
+  border-bottom: 2px dashed #000;
+  margin-bottom: 10px;
+  background: #fff;
+  text-align: center;
+}
+
+#messages{
+  flex: 1;
+  overflow-y: auto;
+  height: 50vh;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messageBubble{
+  padding: 10px 14px;
+  margin: 6px 0;
+  border-radius: 12px;
+  max-width: 70%;
+  font-size: 15px;
+  line-height: 1.4;
+  border: 2px solid #000;
+  background: #fff;
+  word-wrap: break-word;
+}
+
+.myMessage{
+  margin-left: auto;
+}
+
+.otherMessage{
+  margin-right: auto;
+  border-style: dashed;
+}
+
+/* =======================
+   Chat Input Area
+   ======================= */
+
+#chatInputArea{
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+#chatInput{
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+#sendBtn{
+  padding: 10px 16px;
+  border: 2px solid #000;
+  background: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+#sendBtn:hover{
+  background:#f5f5f5;
+}
+
+/* =======================
    Responsive Design
    ======================= */
 
@@ -280,84 +361,4 @@ select {
     line-height: 70px;
   }
 
-}
-/* =======================
-   Chat Header + Bubble UI
-   (Added without modifying existing styles)
-   ======================= */
-
-#chatHeader{
-  font-weight: bold;
-  padding: 10px;
-  border-bottom: 2px dashed #000;
-  margin-bottom: 10px;
-  background: #fafafa;
-  text-align: center;
-}
-
-/* Message container */
-
-#messages{
-  flex: 1;
-  overflow-y: auto;
-  height: 50vh;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Message bubbles */
-
-.messageBubble{
-  padding: 10px 14px;
-  margin: 6px 0;
-  border-radius: 14px;
-  max-width: 70%;
-  font-size: 15px;
-  line-height: 1.4;
-  word-wrap: break-word;
-}
-
-/* Your messages */
-
-.myMessage{
-  background: #d1e7ff;
-  margin-left: auto;
-  border: 2px solid #000;
-}
-
-/* Other riders */
-
-.otherMessage{
-  background: #f1f1f1;
-  border: 2px solid #000;
-}
-
-/* Input area */
-
-#chatInputArea{
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-#chatInput{
-  flex: 1;
-  padding: 10px;
-  border: 2px solid #000;
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-#sendBtn{
-  padding: 10px 16px;
-  border: 2px solid #000;
-  background: #fff;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 10px;
-}
-
-#sendBtn:hover{
-  background:#f0f0f0;
 }
