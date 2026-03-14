@@ -5,6 +5,9 @@
 // Free user timer = 3 minutes
 let freeTime = 180;
 
+let lastMessageCount = 0;
+let messageInterval = null;
+
 // Example cities and metro lines
 const cities = {
   Delhi: ["Blue", "Yellow", "Red", "Violet", "Pink"],
@@ -51,7 +54,7 @@ Object.keys(cities).forEach(city => {
 // Populate Lines
 // ============================
 
-function populateLines() {
+function populateLines(){
 
   lineSelect.innerHTML = "";
 
@@ -71,7 +74,7 @@ citySelect.addEventListener("change", populateLines);
 populateLines();
 
 // ============================
-// Start Chat Button
+// Start Chat
 // ============================
 
 startBtn.addEventListener("click", () => {
@@ -94,10 +97,10 @@ startBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Overlay Logic
+// Overlay
 // ============================
 
-function showOverlay() {
+function showOverlay(){
 
   overlay.style.display = "flex";
   chatContainer.classList.add("blurred");
@@ -105,7 +108,7 @@ function showOverlay() {
 }
 
 // ============================
-// Watch Ad Logic
+// Watch Ad
 // ============================
 
 watchAdBtn.addEventListener("click", () => {
@@ -129,7 +132,7 @@ watchAdBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Pay Button Logic
+// Paid Unlock
 // ============================
 
 payBtn.addEventListener("click", () => {
@@ -148,10 +151,10 @@ payBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Chat UI
+// Start Chat UI
 // ============================
 
-function startChat(isPaid) {
+function startChat(isPaid){
 
   chatContainer.innerHTML = `
 
@@ -176,7 +179,7 @@ function startChat(isPaid) {
 
   `;
 
-  if (isPaid) {
+  if (isPaid){
 
     const sendBtn = document.getElementById("sendBtn");
     const chatInput = document.getElementById("chatInput");
@@ -185,11 +188,17 @@ function startChat(isPaid) {
 
     chatInput.addEventListener("keypress", e => {
 
-      if (e.key === "Enter") sendMessage();
+      if(e.key === "Enter") sendMessage();
 
     });
 
   }
+
+  // start live message refresh
+  if(messageInterval) clearInterval(messageInterval);
+
+  loadMessages();
+  messageInterval = setInterval(loadMessages, 2000);
 
 }
 
@@ -197,32 +206,34 @@ function startChat(isPaid) {
 // Send Message
 // ============================
 
-function sendMessage() {
+function sendMessage(){
 
   const input = document.getElementById("chatInput");
   const messages = document.getElementById("messages");
   const indicator = document.getElementById("newMsgIndicator");
 
-  if (!input.value.trim()) return;
+  if(!input.value.trim()) return;
+
+  const text = input.value;
 
   const isNearBottom =
     messages.scrollHeight - messages.scrollTop - messages.clientHeight < 80;
 
-  const msg = document.createElement("div");
-
-  msg.className = "messageBubble myMessage";
-
-  msg.innerText = input.value;
-
-  messages.appendChild(msg);
-
   input.value = "";
 
-  if (isNearBottom) {
+  fetch("/api/messages",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      city:citySelect.value,
+      line:lineSelect.value,
+      text:text
+    })
+  });
 
-    messages.scrollTop = messages.scrollHeight;
-
-  } else {
+  if(!isNearBottom){
 
     indicator.style.display = "block";
 
@@ -231,7 +242,58 @@ function sendMessage() {
 }
 
 // ============================
-// Indicator Click Scroll
+// Load Messages
+// ============================
+
+function loadMessages(){
+
+  fetch(`/api/messages?city=${citySelect.value}&line=${lineSelect.value}`)
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("messages");
+
+    if(!container) return;
+
+    const indicator = document.getElementById("newMsgIndicator");
+
+    const isNearBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight < 80;
+
+    if(data.length === lastMessageCount) return;
+
+    lastMessageCount = data.length;
+
+    container.innerHTML = "";
+
+    data.forEach(m => {
+
+      const msg = document.createElement("div");
+
+      msg.className = "messageBubble otherMessage";
+
+      msg.innerText = m.text;
+
+      container.appendChild(msg);
+
+    });
+
+    if(isNearBottom){
+
+      container.scrollTop = container.scrollHeight;
+
+    } else {
+
+      indicator.style.display = "block";
+
+    }
+
+  });
+
+}
+
+// ============================
+// New Message Indicator Click
 // ============================
 
 document.addEventListener("click", function(e){
@@ -252,15 +314,15 @@ document.addEventListener("click", function(e){
 // Free Timer
 // ============================
 
-function startFreeTimer() {
+function startFreeTimer(){
 
   let timer = freeTime;
 
-  const interval = setInterval(() => {
+  const interval = setInterval(()=>{
 
     timer--;
 
-    if (timer <= 0) {
+    if(timer <= 0){
 
       clearInterval(interval);
 
@@ -268,7 +330,7 @@ function startFreeTimer() {
 
     }
 
-  }, 1000);
+  },1000);
 
 }
 
@@ -276,18 +338,18 @@ function startFreeTimer() {
 // Share Button
 // ============================
 
-shareBtn.addEventListener("click", () => {
+shareBtn.addEventListener("click",()=>{
 
   const url = window.location.href;
 
-  if (navigator.share) {
+  if(navigator.share){
 
     navigator.share({
-      title: "Metromedia",
-      url: url
+      title:"Metromedia",
+      url:url
     });
 
-  } else {
+  }else{
 
     navigator.clipboard.writeText(url);
 
@@ -301,22 +363,22 @@ shareBtn.addEventListener("click", () => {
 // Session Logging
 // ============================
 
-function logSession(type) {
+function logSession(type){
 
-  fetch("/api/logSession", {
+  fetch("/api/logSession",{
 
-    method: "POST",
+    method:"POST",
 
-    headers: {
-      "Content-Type": "application/json"
+    headers:{
+      "Content-Type":"application/json"
     },
 
-    body: JSON.stringify({
+    body:JSON.stringify({
 
-      city: citySelect.value,
-      line: lineSelect.value,
-      type: type,
-      timestamp: new Date().toISOString()
+      city:citySelect.value,
+      line:lineSelect.value,
+      type:type,
+      timestamp:new Date().toISOString()
 
     })
 
