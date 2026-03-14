@@ -1,44 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Metromedia</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Metromedia</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+
 </head>
+
 <body>
-  <header>
-    <h1>Welcome to Metromedia</h1>
-  </header>
 
-  <main>
-    <section id="page1">
-      <label for="city">Select City:</label>
-      <select id="city"></select>
+<header>
+<h1>Welcome to Metromedia</h1>
+</header>
 
-      <label for="line">Select Line:</label>
-      <select id="line"></select>
+<main>
 
-      <button id="startBtn">Start Metromedia Chat</button>
+<section id="page1">
 
-      <!-- Banner ad on page1 -->
-      <div id="page1Banner" class="ad-banner">
-        <!-- AdSense banner will go here -->
-      </div>
-    </section>
+<label for="city">Select City:</label>
+<select id="city"></select>
 
-    <section id="page2" style="display:none;">
-      <!-- Chat overlay logic handled in app.js -->
-      <div id="chatContainer"></div>
-      <div id="overlay"></div>
-      <button id="watchAdBtn">Watch Ad to Read Only</button>
-      <button id="payBtn">Pay ₹10 for Full Day</button>
+<label for="line">Select Line:</label>
+<select id="line"></select>
 
-      <!-- Share button -->
-      <button id="shareBtn" title="Share Metromedia">Share</button>
-    </section>
-  </main>
+<button id="startBtn">Start Metromedia Chat</button>
 
-  <script src="app.js"></script>
+<!-- Banner ad -->
+<div id="page1Banner" class="ad-banner">
+Ad Space
+</div>
+
+</section>
+
+
+<section id="page2" style="display:none;">
+
+<div id="chatContainer"></div>
+
+<div id="overlay">
+<p>This chat is locked</p>
+<p>Watch ad or pay ₹10</p>
+</div>
+
+<button id="watchAdBtn">Watch Ad to Read Only</button>
+<button id="payBtn">Pay ₹10 for Full Day</button>
+
+<button id="shareBtn">Share</button>
+
+</section>
+
+</main>
+
+
+<!-- FULL SCREEN AD -->
+<div id="adOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; justify-content:center; align-items:center; flex-direction:column; z-index:999;">
+
+<p>Advertisement</p>
+
+<div id="adsenseAd">
+Ad will appear here
+</div>
+
+<p>Ad closing in 5 seconds...</p>
+
+</div>
+
+
+<script src="app.js"></script>
+
 </body>
 </html>
