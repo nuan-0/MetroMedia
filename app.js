@@ -2,13 +2,27 @@
 // Metromedia App Logic
 // ============================
 
-// Free user timer = 3 minutes
+// Free user timer
 let freeTime = 180;
 
 let lastMessageCount = 0;
 let messageInterval = null;
 
-// Example cities and metro lines
+// ============================
+// Anonymous Rider ID
+// ============================
+
+let riderId = localStorage.getItem("riderId");
+
+if (!riderId) {
+  riderId = "Rider" + Math.floor(Math.random() * 10000);
+  localStorage.setItem("riderId", riderId);
+}
+
+// ============================
+// Cities + Metro Lines
+// ============================
+
 const cities = {
   Delhi: ["Blue", "Yellow", "Red", "Violet", "Pink"],
   Bangalore: ["Purple", "Green", "Yellow"],
@@ -43,6 +57,7 @@ const adOverlay = document.getElementById("adOverlay");
 Object.keys(cities).forEach(city => {
 
   const option = document.createElement("option");
+
   option.value = city;
   option.textContent = city;
 
@@ -61,6 +76,7 @@ function populateLines(){
   cities[citySelect.value].forEach(line => {
 
     const option = document.createElement("option");
+
     option.value = line;
     option.textContent = line;
 
@@ -71,6 +87,7 @@ function populateLines(){
 }
 
 citySelect.addEventListener("change", populateLines);
+
 populateLines();
 
 // ============================
@@ -119,6 +136,7 @@ watchAdBtn.addEventListener("click", () => {
 
     adOverlay.style.display = "none";
     overlay.style.display = "none";
+
     chatContainer.classList.remove("blurred");
 
     startChat(false);
@@ -138,6 +156,7 @@ watchAdBtn.addEventListener("click", () => {
 payBtn.addEventListener("click", () => {
 
   overlay.style.display = "none";
+
   chatContainer.classList.remove("blurred");
 
   startChat(true);
@@ -151,7 +170,7 @@ payBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Start Chat UI
+// Chat UI
 // ============================
 
 function startChat(isPaid){
@@ -168,14 +187,17 @@ function startChat(isPaid){
 
   ${isPaid ? `
   <div id="chatInputArea">
-    <input id="chatInput" placeholder="Type message..." />
-    <button id="sendBtn">Send</button>
+  <input id="chatInput" placeholder="Type message..." />
+  <button id="sendBtn">Send</button>
   </div>
-  ` : `
+  `
+  :
+  `
   <div id="chatInputArea">
-    <p>Read only mode</p>
+  <p>Read only mode</p>
   </div>
-  `}
+  `
+  }
 
   `;
 
@@ -188,17 +210,17 @@ function startChat(isPaid){
 
     chatInput.addEventListener("keypress", e => {
 
-      if(e.key === "Enter") sendMessage();
+      if (e.key === "Enter") sendMessage();
 
     });
 
   }
 
-  // start live message refresh
   if(messageInterval) clearInterval(messageInterval);
 
   loadMessages();
-  messageInterval = setInterval(loadMessages, 2000);
+
+  messageInterval = setInterval(loadMessages,2000);
 
 }
 
@@ -217,20 +239,27 @@ function sendMessage(){
   const text = input.value;
 
   const isNearBottom =
-    messages.scrollHeight - messages.scrollTop - messages.clientHeight < 80;
+  messages.scrollHeight - messages.scrollTop - messages.clientHeight < 80;
 
   input.value = "";
 
   fetch("/api/messages",{
+
     method:"POST",
+
     headers:{
       "Content-Type":"application/json"
     },
+
     body:JSON.stringify({
+
       city:citySelect.value,
       line:lineSelect.value,
-      text:text
+      text:text,
+      rider:riderId
+
     })
+
   });
 
   if(!isNearBottom){
@@ -258,7 +287,7 @@ function loadMessages(){
     const indicator = document.getElementById("newMsgIndicator");
 
     const isNearBottom =
-      container.scrollHeight - container.scrollTop - container.clientHeight < 80;
+    container.scrollHeight - container.scrollTop - container.clientHeight < 80;
 
     if(data.length === lastMessageCount) return;
 
@@ -270,9 +299,12 @@ function loadMessages(){
 
       const msg = document.createElement("div");
 
-      msg.className = "messageBubble otherMessage";
+      msg.className =
+      m.rider === riderId
+      ? "messageBubble myMessage"
+      : "messageBubble otherMessage";
 
-      msg.innerText = m.text;
+      msg.innerText = m.rider + ": " + m.text;
 
       container.appendChild(msg);
 
@@ -293,10 +325,10 @@ function loadMessages(){
 }
 
 // ============================
-// New Message Indicator Click
+// Indicator Click
 // ============================
 
-document.addEventListener("click", function(e){
+document.addEventListener("click",function(e){
 
   if(e.target.id === "newMsgIndicator"){
 
@@ -345,8 +377,10 @@ shareBtn.addEventListener("click",()=>{
   if(navigator.share){
 
     navigator.share({
+
       title:"Metromedia",
       url:url
+
     });
 
   }else{
