@@ -1,30 +1,34 @@
 let messages = {};
 
-export default function handler(req, res) {
+export default function handler(req, res){
 
-  if (req.method === "POST") {
+  if(req.method === "POST"){
 
-    const { city, line, text } = req.body;
+    const { city, line, text, rider } = req.body;
 
     const room = `${city}-${line}`;
 
-    if (!messages[room]) {
+    if(!messages[room]){
+
       messages[room] = [];
+
     }
 
     messages[room].push({
+
       text,
+      rider,
       time: Date.now()
+
     });
 
-    // keep last 50 messages only
     messages[room] = messages[room].slice(-50);
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success:true });
 
   }
 
-  else if (req.method === "GET") {
+  else if(req.method === "GET"){
 
     const { city, line } = req.query;
 
