@@ -40,7 +40,6 @@ const adOverlay = document.getElementById("adOverlay");
 Object.keys(cities).forEach(city => {
 
   const option = document.createElement("option");
-
   option.value = city;
   option.textContent = city;
 
@@ -59,7 +58,6 @@ function populateLines() {
   cities[citySelect.value].forEach(line => {
 
     const option = document.createElement("option");
-
     option.value = line;
     option.textContent = line;
 
@@ -96,19 +94,18 @@ startBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Overlay
+// Overlay Logic
 // ============================
 
 function showOverlay() {
 
-  overlay.style.display = "block";
-
-  chatContainer.innerHTML = "";
+  overlay.style.display = "flex";
+  chatContainer.classList.add("blurred");
 
 }
 
 // ============================
-// Watch Ad
+// Watch Ad Logic
 // ============================
 
 watchAdBtn.addEventListener("click", () => {
@@ -119,9 +116,12 @@ watchAdBtn.addEventListener("click", () => {
 
     adOverlay.style.display = "none";
     overlay.style.display = "none";
+    chatContainer.classList.remove("blurred");
 
     startChat(false);
+
     logSession("free");
+
     startFreeTimer();
 
   }, 5000);
@@ -129,12 +129,13 @@ watchAdBtn.addEventListener("click", () => {
 });
 
 // ============================
-// Pay Button
+// Pay Button Logic
 // ============================
 
 payBtn.addEventListener("click", () => {
 
   overlay.style.display = "none";
+  chatContainer.classList.remove("blurred");
 
   startChat(true);
 
@@ -159,6 +160,8 @@ function startChat(isPaid) {
   </div>
 
   <div id="messages"></div>
+
+  <div id="newMsgIndicator">New messages ↓</div>
 
   ${isPaid ? `
   <div id="chatInputArea">
@@ -198,10 +201,10 @@ function sendMessage() {
 
   const input = document.getElementById("chatInput");
   const messages = document.getElementById("messages");
+  const indicator = document.getElementById("newMsgIndicator");
 
   if (!input.value.trim()) return;
 
-  // Check if user is near bottom
   const isNearBottom =
     messages.scrollHeight - messages.scrollTop - messages.clientHeight < 80;
 
@@ -215,12 +218,35 @@ function sendMessage() {
 
   input.value = "";
 
-  // Auto-scroll only if user was near bottom
   if (isNearBottom) {
+
     messages.scrollTop = messages.scrollHeight;
+
+  } else {
+
+    indicator.style.display = "block";
+
   }
 
 }
+
+// ============================
+// Indicator Click Scroll
+// ============================
+
+document.addEventListener("click", function(e){
+
+  if(e.target.id === "newMsgIndicator"){
+
+    const messages = document.getElementById("messages");
+
+    messages.scrollTop = messages.scrollHeight;
+
+    e.target.style.display = "none";
+
+  }
+
+});
 
 // ============================
 // Free Timer
