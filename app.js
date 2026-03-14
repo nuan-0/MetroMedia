@@ -201,6 +201,10 @@ function sendMessage() {
 
   if (!input.value.trim()) return;
 
+  // Check if user is near bottom
+  const isNearBottom =
+    messages.scrollHeight - messages.scrollTop - messages.clientHeight < 80;
+
   const msg = document.createElement("div");
 
   msg.className = "messageBubble myMessage";
@@ -211,7 +215,10 @@ function sendMessage() {
 
   input.value = "";
 
-  messages.scrollTop = messages.scrollHeight;
+  // Auto-scroll only if user was near bottom
+  if (isNearBottom) {
+    messages.scrollTop = messages.scrollHeight;
+  }
 
 }
 
